@@ -1,0 +1,12 @@
+[submodule "tclconfig"]
+	path = tclconfig
+	url = https://github.com/tcltk/tclconfig.git
+[submodule "dependencies/tcl8.6"]
+	path = dependencies/tcl8.6
+	url = https://github.com/tcltk/tcl.git
+[submodule "dependencies/tcl9.0"]
+	path = dependencies/tcl9.0
+	url = https://github.com/tcltk/tcl.git
+[submodule "dependencies/cookfs"]
+	path = dependencies/cookfs
+	url = https://github.com/chpock/cookfs.git
