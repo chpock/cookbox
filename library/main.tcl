@@ -132,8 +132,6 @@ proc op-cookinize { options } {
     puts -nonewline $fh $head
     close $fh
 
-    puts "OPTS: [dict get $options cookfs_opts]"
-
     cookfs::Mount $archive $archive {*}[dict get $options cookfs_opts]
 
     file copy -force "//cookfs:/lib" $archive
