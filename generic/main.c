@@ -6,6 +6,16 @@
 #include <tcl.h>
 #include <tclCookfs.h>
 
+#ifdef __WIN32__
+#define WIN32_LEAN_AND_MEAN
+#ifndef STRICT
+#define STRICT // See MSDN Article Q83456
+#endif /* STRICT */
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
+#include <tchar.h>
+#endif
+
 #define VFS_MOUNT "//cookfs:/"
 
 #ifdef __WIN32__
@@ -13,6 +23,21 @@
 #else
 #define NULL_DEVICE "/dev/null"
 #endif /* __WIN32__ */
+
+#ifndef STRINGIFY
+#  define STRINGIFY(x) STRINGIFY1(x)
+#  define STRINGIFY1(x) #x
+#endif
+
+static int Cookbox_VersionCmd(ClientData clientData,
+    Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+    (void)clientData;
+    (void)objc;
+    (void)objv;
+    Tcl_SetObjResult(interp, Tcl_NewStringObj(PACKAGE_VERSION, -1));
+    return TCL_OK;
+}
 
 static int Cookbox_Startup(Tcl_Interp *interp) {
 
@@ -86,9 +111,20 @@ static int Cookbox_Startup(Tcl_Interp *interp) {
     // from this VFS. It is not, then assume we are in bootstrap more and run
     // Tcl interp as is.
     if (isVFSAvailable) {
-        Tcl_PutEnv("TCL_LIBRARY=" VFS_MOUNT "lib");
+        // Instruct the Tcl core to look for packages in cookfs.
+        Tcl_PutEnv("TCL_LIBRARY=" VFS_MOUNT "lib/tcl" TCL_VERSION);
+        // Ignore the TCLLIBPATH environment variable when searching for packages.
+        // We cannot do just Tcl_PutEnv("TCLLIBPATH=") here. In this case,
+        // [info exists env(TCLLIBPATH)] will be true, but accessing $env(TCLLIBPATH)
+        // element array results in a "no such variable" error.
+        // Thus, here we will unset the array element.
+        Tcl_UnsetVar2(interp, "env", "TCLLIBPATH", TCL_GLOBAL_ONLY);
         // Use main.tcl script as our main code
         Tcl_SetStartupScript(Tcl_NewStringObj(VFS_MOUNT "main.tcl", -1), NULL);
+        // Here is an example how to define our small command
+        Tcl_CreateNamespace(interp, "::cookbox", NULL, NULL);
+        Tcl_CreateObjCommand(interp, "::cookbox::version", Cookbox_VersionCmd,
+            (ClientData) NULL, NULL);
     }
 
     if (Tcl_Init(interp) != TCL_OK) {
@@ -103,12 +139,6 @@ error:
 
 }
 
-#if TCL_MAJOR_VERSION > 8
-#define MIN_TCL_VERSION "9.0"
-#else
-#define MIN_TCL_VERSION "8.5"
-#endif
-
 #ifdef __WIN32__
 int _tmain(int argc, TCHAR *argv[]) {
 #else
@@ -117,5 +147,3 @@ int main(int argc, char **argv) {
     Tcl_Main(argc, argv, Cookbox_Startup);
     return 0;
 }
-
-

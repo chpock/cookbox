@@ -75,9 +75,9 @@ TEA_ADD_SOURCES([main.c])
 TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([])
 TEA_ADD_LIBS([])
-TEA_ADD_CFLAGS([])
+TEA_ADD_CFLAGS([-Wall -Wextra -pedantic -fno-asynchronous-unwind-tables -ffunction-sections -fdata-sections -fvisibility=hidden])
 TEA_ADD_STUB_SOURCES([])
-TEA_ADD_TCL_SOURCES([library/main.tcl])
+TEA_ADD_TCL_SOURCES([library/main.tcl library/args.tcl package/cookbox.tcl])
 
 #--------------------------------------------------------------------
 # __CHANGE__
@@ -94,20 +94,19 @@ TEA_ADD_TCL_SOURCES([library/main.tcl])
 bin_BINARIES="${PACKAGE_NAME}${EXEEXT}"
 AC_SUBST(bin_BINARIES)
 
+COOKBOX_FIND_STATIC_TCL_PACKAGE(cookfs)
+
 #CLEANFILES="$CLEANFILES pkgIndex.tcl"
 if test "${TEA_PLATFORM}" = "windows" ; then
-    # Ensure no empty if clauses
-    :
-    #TEA_ADD_SOURCES([win/winFile.c])
-    #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
+    TEA_ADD_CFLAGS([-mconsole -municode -DUNICODE -D_UNICODE -DWINVER=0x0501 -D_WIN32_WINNT=0x0501])
+    # cookfs with encryption requires bcrypt library on Windows
+    TEA_ADD_LIBS([-lbcrypt])
 else
     # Ensure no empty else clauses
     :
     #TEA_ADD_SOURCES([unix/unixFile.c])
     #TEA_ADD_LIBS([-lsuperfly])
 fi
-
-COOKBOX_FIND_STATIC_TCL_PACKAGE(cookfs)
 
 # We are always static
 SHARED_BUILD=0
@@ -160,6 +159,8 @@ TEA_CONFIG_CFLAGS
 
 TEA_ENABLE_SYMBOLS
 
+COOKGOX_SET_LDFLAGS
+
 #--------------------------------------------------------------------
 # This macro generates a line to use when building a library.  It
 # depends on values set by the TEA_ENABLE_SHARED, TEA_ENABLE_SYMBOLS,
@@ -179,6 +180,27 @@ TEA_MAKE_LIB
 TEA_PROG_TCLSH
 #TEA_PROG_WISH
 
+# TEA_PROG_TCLSH macro is buggy on Windows and cannot find tclsh.exe correctly
+if test "${TEA_PLATFORM}" = "windows" ; then
+    if ! test -e "${TCLSH_PROG}" ; then
+        AC_MSG_CHECKING([for tclsh for Windows])
+        if test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${EXEEXT}"
+        elif test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}s${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}s${EXEEXT}"
+        elif test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}t${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}t${EXEEXT}"
+        elif test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}st${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}st${EXEEXT}"
+        fi
+        if ! test -e "${TCLSH_PROG}" ; then
+            AC_MSG_ERROR([Can't find tclsh*.exe])
+        fi
+        AC_MSG_RESULT([${TCLSH_PROG}])
+        AC_SUBST(TCLSH_PROG)
+    fi
+fi
+
 #--------------------------------------------------------------------
 # Setup a *Config.sh.in configuration file.
 #--------------------------------------------------------------------
@@ -192,7 +214,7 @@ TEA_PROG_TCLSH
 # substituting the AC variables in. Include these here.
 #--------------------------------------------------------------------
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile pkgIndex.tcl])
 #AC_CONFIG_FILES([sampleConfig.sh])
 
 #--------------------------------------------------------------------

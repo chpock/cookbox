@@ -5409,7 +5409,7 @@ printf "%s\n" "$ac_cv_c_bigendian" >&6; }
 
 
 
-    PKG_CFLAGS="$PKG_CFLAGS "
+    PKG_CFLAGS="$PKG_CFLAGS -Wall -Wextra -pedantic -fno-asynchronous-unwind-tables -ffunction-sections -fdata-sections -fvisibility=hidden"
 
 
 
@@ -5437,7 +5437,7 @@ printf "%s\n" "$ac_cv_c_bigendian" >&6; }
 
 
 
-    vars="library/main.tcl"
+    vars="library/main.tcl library/args.tcl package/cookbox.tcl"
     for i in $vars; do
 	# check for existence, be strict because it is installed
 	if test ! -f "${srcdir}/$i" ; then
@@ -5463,19 +5463,6 @@ printf "%s\n" "$ac_cv_c_bigendian" >&6; }
 bin_BINARIES="${PACKAGE_NAME}${EXEEXT}"
 
 
-#CLEANFILES="$CLEANFILES pkgIndex.tcl"
-if test "${TEA_PLATFORM}" = "windows" ; then
-    # Ensure no empty if clauses
-    :
-    #TEA_ADD_SOURCES([win/winFile.c])
-    #TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${srcdir}/win)\"])
-else
-    # Ensure no empty else clauses
-    :
-    #TEA_ADD_SOURCES([unix/unixFile.c])
-    #TEA_ADD_LIBS([-lsuperfly])
-fi
-
 
     pkgname="cookfs"
     unset pkglib
@@ -5498,7 +5485,7 @@ printf %s "checking for Tcl static package \"$pkgname\"... " >&6; }
     fi
 
 
-    vars="${pkglib}"
+    vars="\"`${CYGPATH} ${pkglib}`\""
     for i in $vars; do
 	if test "${TEA_PLATFORM}" = "windows" -a "$GCC" = "yes" ; then
 	    # Convert foo.lib to -lfoo for GCC.  No-op if not *.lib
@@ -5511,6 +5498,31 @@ printf %s "checking for Tcl static package \"$pkgname\"... " >&6; }
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${pkglib}" >&5
 printf "%s\n" "${pkglib}" >&6; }
 
+
+#CLEANFILES="$CLEANFILES pkgIndex.tcl"
+if test "${TEA_PLATFORM}" = "windows" ; then
+
+    PKG_CFLAGS="$PKG_CFLAGS -mconsole -municode -DUNICODE -D_UNICODE -DWINVER=0x0501 -D_WIN32_WINNT=0x0501"
+
+
+    # cookfs with encryption requires bcrypt library on Windows
+
+    vars="-lbcrypt"
+    for i in $vars; do
+	if test "${TEA_PLATFORM}" = "windows" -a "$GCC" = "yes" ; then
+	    # Convert foo.lib to -lfoo for GCC.  No-op if not *.lib
+	    i=`echo "$i" | sed -e 's/^\([^-].*\)\.[lL][iI][bB]$/-l\1/'`
+	fi
+	PKG_LIBS="$PKG_LIBS $i"
+    done
+
+
+else
+    # Ensure no empty else clauses
+    :
+    #TEA_ADD_SOURCES([unix/unixFile.c])
+    #TEA_ADD_LIBS([-lsuperfly])
+fi
 
 # We are always static
 SHARED_BUILD=0
@@ -8564,6 +8576,167 @@ printf "%s\n" "enabled $tcl_ok debugging" >&6; }
     fi
 
 
+
+
+
+
+    _LDFLAGS="$LDFLAGS"
+    _CFLAGS="$CFLAGS"
+    LDFLAGS="-Wl,-Map=conftest.map"
+    CFLAGS=
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether LD supports -Wl,-Map=" >&5
+printf %s "checking whether LD supports -Wl,-Map=... " >&6; }
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        LDFLAGS="$_LDFLAGS -Wl,-Map=\$@.map"
+
+else $as_nop
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        LDFLAGS="$_LDFLAGS"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+    CFLAGS="$_CFLAGS"
+
+    _LDFLAGS="$LDFLAGS"
+    _CFLAGS="$CFLAGS"
+    LDFLAGS="-Wl,--gc-sections"
+    CFLAGS=
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether LD supports -Wl,--gc-sections" >&5
+printf %s "checking whether LD supports -Wl,--gc-sections... " >&6; }
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        LDFLAGS="$_LDFLAGS -Wl,--gc-sections -Wl,--as-needed"
+
+else $as_nop
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+        LDFLAGS="$_LDFLAGS"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+    CFLAGS="$_CFLAGS"
+
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether to enable strip" >&5
+printf %s "checking whether to enable strip... " >&6; }
+    if test "${CFLAGS_DEFAULT}" != "${CFLAGS_DEBUG}"; then
+
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+        # Test this only on MacOS as GNU ld interprets -dead_strip
+        # as '-de'+'ad_strip'
+        if test "$SHLIB_SUFFIX" = ".dylib"; then
+            _LDFLAGS="$LDFLAGS"
+            _CFLAGS="$CFLAGS"
+            LDFLAGS="-Wl,-dead_strip"
+            CFLAGS=
+            { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether LD supports -Wl,-dead_strip" >&5
+printf %s "checking whether LD supports -Wl,-dead_strip... " >&6; }
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+
+                { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+                LDFLAGS="$_LDFLAGS -Wl,-dead_strip,-x,-S"
+
+else $as_nop
+
+                { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+                LDFLAGS="$_LDFLAGS"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+            CFLAGS="$_CFLAGS"
+        fi
+
+        _LDFLAGS="$LDFLAGS"
+        _CFLAGS="$CFLAGS"
+        LDFLAGS="-s"
+        CFLAGS=
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether LD supports -s" >&5
+printf %s "checking whether LD supports -s... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+
+            { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+            LDFLAGS="$_LDFLAGS -s"
+
+else $as_nop
+
+            { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+            LDFLAGS="$_LDFLAGS"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+        CFLAGS="$_CFLAGS"
+
+    else
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+    fi
+
+
+
 #--------------------------------------------------------------------
 # This macro generates a line to use when building a library.  It
 # depends on values set by the TEA_ENABLE_SHARED, TEA_ENABLE_SYMBOLS,
@@ -8895,6 +9068,29 @@ printf "%s\n" "${TCLSH_PROG}" >&6; }
 
 #TEA_PROG_WISH
 
+# TEA_PROG_TCLSH macro is buggy on Windows and cannot find tclsh.exe correctly
+if test "${TEA_PLATFORM}" = "windows" ; then
+    if ! test -e "${TCLSH_PROG}" ; then
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for tclsh for Windows" >&5
+printf %s "checking for tclsh for Windows... " >&6; }
+        if test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${EXEEXT}"
+        elif test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}s${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}s${EXEEXT}"
+        elif test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}t${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}t${EXEEXT}"
+        elif test -f "${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}st${EXEEXT}" ; then
+          TCLSH_PROG="${TCL_BIN_DIR}/../bin/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}st${EXEEXT}"
+        fi
+        if ! test -e "${TCLSH_PROG}" ; then
+            as_fn_error $? "Can't find tclsh*.exe" "$LINENO" 5
+        fi
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${TCLSH_PROG}" >&5
+printf "%s\n" "${TCLSH_PROG}" >&6; }
+
+    fi
+fi
+
 #--------------------------------------------------------------------
 # Setup a *Config.sh.in configuration file.
 #--------------------------------------------------------------------
@@ -8908,7 +9104,7 @@ printf "%s\n" "${TCLSH_PROG}" >&6; }
 # substituting the AC variables in. Include these here.
 #--------------------------------------------------------------------
 
-ac_config_files="$ac_config_files Makefile"
+ac_config_files="$ac_config_files Makefile pkgIndex.tcl"
 
 #AC_CONFIG_FILES([sampleConfig.sh])
 
@@ -9619,6 +9815,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "pkgIndex.tcl") CONFIG_FILES="$CONFIG_FILES pkgIndex.tcl" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

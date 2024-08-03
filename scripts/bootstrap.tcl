@@ -26,6 +26,7 @@ puts ""
 if { [catch {
 
     set fsid [cookfs::Mount $archive $archive -compression zstd:19]
+    #set fsid [cookfs::Mount $archive $archive -compression lzma:9]
 
     # Copy Tcl runtime to the archive
     foreach file [glob -directory $runtime *] {

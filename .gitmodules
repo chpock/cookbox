@@ -10,3 +10,6 @@
 [submodule "dependencies/cookfs"]
 	path = dependencies/cookfs
 	url = https://github.com/chpock/cookfs.git
+[submodule "dependencies/tclsh-wrapper"]
+	path = dependencies/tclsh-wrapper
+	url = https://github.com/suewonjp/tclsh-wrapper.git

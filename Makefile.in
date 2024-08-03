@@ -226,7 +226,7 @@ doc:
 #	@echo "        xml2nroff sample.xml > sample.n"
 #	@echo "        xml2html sample.xml > sample.html"
 
-install: all install-binaries install-libraries install-doc
+install: all install-binaries
 
 install-binaries: binaries install-bin-binaries
 
@@ -320,24 +320,32 @@ $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
 
 VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/macosx
 
-cookbox.vfs:
+override TESTFLAGS += -verbose "body error start"
+
+cookbox.vfs: $(srcdir)/package/cookbox.tcl
 	rm -rf "$@"
 	mkdir -p "$@"/lib
 	# Copy Tcl runtime to the directory
 	cp -r $(TCL_BIN_DIR)/tcl* "$@"/lib
 	rm -f "$@"/lib/*.sh
+	# Add some package also. For example, add our package.
+	mkdir "$@"/lib/$(PACKAGE_NAME)$(PACKAGE_VERSION)
+	cp pkgIndex.tcl "$(srcdir)/package"/*.tcl "$@"/lib/$(PACKAGE_NAME)$(PACKAGE_VERSION)
+	# Add TclReadLine package
+	mkdir "$@"/lib/TclReadLine
+	cp "$(srcdir)"/dependencies/tclsh-wrapper/TclReadLine/* "$@"/lib/TclReadLine
 
 cookbox.img: $(srcdir)/scripts/bootstrap.tcl cookbox.vfs cookbox_raw$(EXEEXT) $(PKG_TCL_SOURCES)
 	rm -rf "$@"
 	TCL_LIBRARY=`$(CYGPATH) $(TCL_BIN_DIR)/tcl?.*` \
-	    ./cookbox_raw$(EXEEXT) `$(CYGPATH) $<` "$@" "cookbox.vfs" "$(srcdir)/library/main.tcl"
+	    ./cookbox_raw$(EXEEXT) `$(CYGPATH) $<` "$@" "cookbox.vfs" "`$(CYGPATH) "$(srcdir)/library"`"/*.tcl
 
-cookbox_raw: $(PKG_OBJECTS)
+cookbox_raw$(EXEEXT): $(PKG_OBJECTS)
 	rm -f "$@"
-	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_DEFAULT) -o "$@" $^ $(LIBS) $(TCL_LIBS) $(TCL_LD_FLAGS)
+	$(CC) $(PKG_CFLAGS) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_DEFAULT) -o "$@" $^ $(LIBS) $(TCL_LIBS) $(TCL_LD_FLAGS)
 	chmod +x "$@"
 
-cookbox: cookbox_raw cookbox.img
+cookbox$(EXEEXT): cookbox_raw$(EXEEXT) cookbox.img
 	rm -f "$@"
 	cat "$<" cookbox.img >> "$@"
 	chmod +x "$@"
@@ -351,6 +359,17 @@ $(srcdir)/manifest.uuid:
 	    (printf "svn-r" >$(srcdir)/manifest.uuid ; \
 	    svn info --show-item last-changed-revision >>$(srcdir)/manifest.uuid) || \
 	    printf "unknown" >$(srcdir)/manifest.uuid)
+
+ifeq ($(CFLAGS_DEFAULT),-g)
+    PACKAGE_ARCHIVE = $(PACKAGE_NAME)-debug-$(PACKAGE_VERSION)
+else
+    PACKAGE_ARCHIVE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
+endif
+
+.PHONY: package
+package:
+	$(MAKE) install exec_prefix=./$(PACKAGE_ARCHIVE) prefix=./$(PACKAGE_ARCHIVE)
+	tar zcvf $(PACKAGE_ARCHIVE).tar.gz $(PACKAGE_ARCHIVE)
 
 #========================================================================
 # Distribution creation

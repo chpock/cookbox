@@ -1,0 +1,44 @@
+# Copyright (c) 2024 Konstantin Kushnir <chpock@gmail.com>
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
+if {[lsearch [namespace children] ::tcltest] == -1} {
+    package require tcltest
+    namespace import ::tcltest::*
+}
+
+test cooboxBasic-1.1 "Test archive creating" -setup {
+    set dir [makeDirectory "foo"]
+    makeFile {TEST1} test1 $dir
+    set subdir [makeDirectory "bar" $dir]
+    makeFile {} empty $subdir
+} -body {
+    exec $::cookbox cf "archive" "foo"
+    set result [exec $::cookbox tf "archive"]
+} -cleanup {
+    catch { file delete -force -- $dir }
+    unset -nocomplain dir subdir result
+} -result {foo/
+foo/bar/
+foo/bar/empty
+foo/test1}
+
+test cooboxBasic-2.1 "Test eval inline" -body {
+    set ok [exec $::cookbox --eval {puts hello}]
+} -cleanup {
+    unset -nocomplain ok
+} -result {hello}
+
+test cooboxBasic-2.2 "Test eval file" -setup {
+    set script [makeFile {puts helloFile} test1]
+} -body {
+    set ok [exec $::cookbox --eval -f $script]
+} -cleanup {
+    catch { file delete -force -- $script }
+    unset -nocomplain ok
+} -result helloFile
+
+# cleanup
+cleanupTests
+return
