@@ -458,10 +458,14 @@ if { [dict exists $options bzip2] } {
     set compression "none"
 }
 
-if { [info exists compression] } {
-    if { [dict exists $options compression-level] } {
-        set compression "${compression}:[dict get $options compression-level]"
+if { [dict exists $options compression-level] } {
+    if { ![info exists compression] } {
+        set compression "lzma"
     }
+    set compression "${compression}:[dict get $options compression-level]"
+}
+
+if { [info exists compression] } {
     lappend cookfs_opts -compression $compression
 }
 
