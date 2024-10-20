@@ -1,3 +1,11 @@
+2024-10-21 Konstantin Kushnir <chpock@gmail.com>
+	* Update cookfs to version 1.9.0
+	* Update Tcl8 to version 8.6.15
+	* Update Tcl9 to version 9.0.0
+
+2024-10-21 Konstantin Kushnir <chpock@gmail.com>
+	* Bumped version to 1.1.0
+
 2024-09-08 Konstantin Kushnir <chpock@gmail.com>
 	* Fix a bug when --compression-level has no effect when compression type
 	is not specified

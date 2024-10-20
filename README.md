@@ -130,44 +130,45 @@ Using this option it is possible to check the content of an archive. For example
 $ ./cookbox --analyze -f cookbox
 Total pages: 27
 
-Stub    : packed:  3184983
+Stub    : packed:  3335048
 
-Page  0 : packed:     8854; unpacked:    40415; ratio: 21.91%; number of files: 1
-Page  1 : packed:    42306; unpacked:   180756; ratio: 23.41%; number of files: 1
-Page  2 : packed:    10337; unpacked:    37407; ratio: 27.63%; number of files: 1
-Page  3 : packed:    25831; unpacked:   104660; ratio: 24.68%; number of files: 1
-Page  4 : packed:    15267; unpacked:    59952; ratio: 25.47%; number of files: 1
-Page  5 : packed:    70835; unpacked:    70835; ratio: 100.00%; number of files: 1
-Page  6 : packed:    22826; unpacked:    92873; ratio: 24.58%; number of files: 1
-Page  7 : packed:    16172; unpacked:    97050; ratio: 16.66%; number of files: 1
-Page  8 : packed:    14788; unpacked:    48207; ratio: 30.68%; number of files: 1
-Page  9 : packed:    29805; unpacked:   132509; ratio: 22.49%; number of files: 1
-Page 10 : packed:    24523; unpacked:   130423; ratio: 18.80%; number of files: 1
-Page 11 : packed:    22631; unpacked:    91831; ratio: 24.64%; number of files: 1
-Page 12 : packed:    14439; unpacked:    85574; ratio: 16.87%; number of files: 1
-Page 13 : packed:    13358; unpacked:    82537; ratio: 16.18%; number of files: 1
-Page 14 : packed:    15096; unpacked:    93918; ratio: 16.07%; number of files: 1
-Page 15 : packed:    15082; unpacked:    86619; ratio: 17.41%; number of files: 1
-Page 16 : packed:    14324; unpacked:    84532; ratio: 16.95%; number of files: 1
-Page 17 : packed:    14498; unpacked:    85574; ratio: 16.94%; number of files: 1
-Page 18 : packed:    13120; unpacked:    80453; ratio: 16.31%; number of files: 1
-Page 19 : packed:     8018; unpacked:    70974; ratio: 11.30%; number of files: 1
-Page 20 : packed:    15008; unpacked:    92877; ratio: 16.16%; number of files: 1
-Page 21 : packed:    14126; unpacked:    48028; ratio: 29.41%; number of files: 1
-Page 22 : packed:    13576; unpacked:    41862; ratio: 32.43%; number of files: 1
-Page 23 : packed:    13627; unpacked:    46996; ratio: 29.00%; number of files: 1
-Page 24 : packed:    53502; unpacked:   255998; ratio: 20.90%; number of files: 87
-Page 25 : packed:     5949; unpacked:    19687; ratio: 30.22%; number of files: 3
-Page 26 : packed:     4959; unpacked:    23629; ratio: 20.99%; number of files: 2
+Page  0 : packed(zstd:19):     8854; unpacked:    40415; ratio: 21.91%; number of files: 1
+Page  1 : packed(zstd:19):    42310; unpacked:   180756; ratio: 23.41%; number of files: 1
+Page  2 : packed(zstd:19):    10337; unpacked:    37407; ratio: 27.63%; number of files: 1
+Page  3 : packed(zstd:19):    25831; unpacked:   104660; ratio: 24.68%; number of files: 1
+Page  4 : packed(zstd:19):    15271; unpacked:    59958; ratio: 25.47%; number of files: 1
+Page  5 : packed(none):    70835; unpacked:    70835; ratio: 100.00%; number of files: 1
+Page  6 : packed(zstd:19):    22826; unpacked:    92873; ratio: 24.58%; number of files: 1
+Page  7 : packed(zstd:19):    16172; unpacked:    97050; ratio: 16.66%; number of files: 1
+Page  8 : packed(zstd:19):    14788; unpacked:    48207; ratio: 30.68%; number of files: 1
+Page  9 : packed(zstd:19):    29805; unpacked:   132509; ratio: 22.49%; number of files: 1
+Page 10 : packed(zstd:19):    24523; unpacked:   130423; ratio: 18.80%; number of files: 1
+Page 11 : packed(zstd:19):    22631; unpacked:    91831; ratio: 24.64%; number of files: 1
+Page 12 : packed(zstd:19):    14439; unpacked:    85574; ratio: 16.87%; number of files: 1
+Page 13 : packed(zstd:19):    13358; unpacked:    82537; ratio: 16.18%; number of files: 1
+Page 14 : packed(zstd:19):    15096; unpacked:    93918; ratio: 16.07%; number of files: 1
+Page 15 : packed(zstd:19):    15082; unpacked:    86619; ratio: 17.41%; number of files: 1
+Page 16 : packed(zstd:19):    14324; unpacked:    84532; ratio: 16.95%; number of files: 1
+Page 17 : packed(zstd:19):    14498; unpacked:    85574; ratio: 16.94%; number of files: 1
+Page 18 : packed(zstd:19):    13120; unpacked:    80453; ratio: 16.31%; number of files: 1
+Page 19 : packed(zstd:19):     8018; unpacked:    70974; ratio: 11.30%; number of files: 1
+Page 20 : packed(zstd:19):    15008; unpacked:    92877; ratio: 16.16%; number of files: 1
+Page 21 : packed(zstd:19):    14126; unpacked:    48028; ratio: 29.41%; number of files: 1
+Page 22 : packed(zstd:19):    13576; unpacked:    41862; ratio: 32.43%; number of files: 1
+Page 23 : packed(zstd:19):    13627; unpacked:    46996; ratio: 29.00%; number of files: 1
+Page 24 : packed(zstd:19):    53475; unpacked:   256138; ratio: 20.88%; number of files: 87
+Page 25 : packed(zstd:19):     5949; unpacked:    19687; ratio: 30.22%; number of files: 3
+Page 26 : packed(lzma:9):     4946; unpacked:    23645; ratio: 20.92%; number of files: 2
 
-Index   : packed:        -; unpacked:     4615; ratio: -
+PgIndex : packed(zstd:19):      674; unpacked:      733; ratio: 91.95%
+FsIndex : packed(zstd:19):     1496; unpacked:     4705; ratio: 31.80%
 
 -----------------------------------------------------------------------
 
 Content:
 
 Page  0 : lib/TclReadLine/TclReadLine.tcl
-Page  1 : lib/tcl9/9.0/http-2.10b3.tm
+Page  1 : lib/tcl9/9.0/http-2.10.0.tm
 Page  2 : lib/tcl9/9.0/msgcat-1.7.1.tm
 Page  3 : lib/tcl9/9.0/tcltest-2.5.8.tm
 Page  4 : lib/tcl9.0/clock.tcl
@@ -190,7 +191,7 @@ Page 20 : lib/tcl9.0/encoding/ksc5601.enc
 Page 21 : lib/tcl9.0/encoding/macJapan.enc
 Page 22 : lib/tcl9.0/encoding/shiftjis.enc
 Page 23 : lib/tcl9.0/safe.tcl
-Page 24 : lib/TclReadLine/pkgIndex.tcl lib/cookbox1.0.0/cookbox.tcl lib/cookbox1.0.0/pkgIndex.tcl lib/tcl9.0/auto.tcl lib/tcl9.0/foreachline.tcl lib/tcl9.0/history.tcl lib/tcl9.0/icu.tcl lib/tcl9.0/init.tcl lib/tcl9.0/install.tcl lib/tcl9.0/package.tcl lib/tcl9.0/parray.tcl lib/tcl9.0/readfile.tcl lib/tcl9.0/tclAppInit.c lib/tcl9.0/tclIndex lib/tcl9.0/tm.tcl lib/tcl9.0/word.tcl lib/tcl9.0/writefile.tcl lib/tcl9.0/cookiejar0.2/cookiejar.tcl lib/tcl9.0/cookiejar0.2/idna.tcl lib/tcl9.0/cookiejar0.2/pkgIndex.tcl lib/tcl9.0/encoding/ascii.enc lib/tcl9.0/encoding/cp1250.enc lib/tcl9.0/encoding/cp1251.enc lib/tcl9.0/encoding/cp1252.enc lib/tcl9.0/encoding/cp1253.enc lib/tcl9.0/encoding/cp1254.enc lib/tcl9.0/encoding/cp1255.enc lib/tcl9.0/encoding/cp1256.enc lib/tcl9.0/encoding/cp1257.enc lib/tcl9.0/encoding/cp1258.enc lib/tcl9.0/encoding/cp437.enc lib/tcl9.0/encoding/cp737.enc lib/tcl9.0/encoding/cp775.enc lib/tcl9.0/encoding/cp850.enc lib/tcl9.0/encoding/cp852.enc lib/tcl9.0/encoding/cp855.enc lib/tcl9.0/encoding/cp857.enc lib/tcl9.0/encoding/cp860.enc lib/tcl9.0/encoding/cp861.enc lib/tcl9.0/encoding/cp862.enc lib/tcl9.0/encoding/cp863.enc lib/tcl9.0/encoding/cp864.enc lib/tcl9.0/encoding/cp865.enc lib/tcl9.0/encoding/cp866.enc lib/tcl9.0/encoding/cp869.enc lib/tcl9.0/encoding/cp874.enc lib/tcl9.0/encoding/dingbats.enc lib/tcl9.0/encoding/ebcdic.enc lib/tcl9.0/encoding/gb1988.enc lib/tcl9.0/encoding/iso2022-jp.enc lib/tcl9.0/encoding/iso2022-kr.enc lib/tcl9.0/encoding/iso2022.enc lib/tcl9.0/encoding/iso8859-1.enc lib/tcl9.0/encoding/iso8859-10.enc lib/tcl9.0/encoding/iso8859-11.enc lib/tcl9.0/encoding/iso8859-13.enc lib/tcl9.0/encoding/iso8859-14.enc lib/tcl9.0/encoding/iso8859-15.enc lib/tcl9.0/encoding/iso8859-16.enc lib/tcl9.0/encoding/iso8859-2.enc lib/tcl9.0/encoding/iso8859-3.enc lib/tcl9.0/encoding/iso8859-4.enc lib/tcl9.0/encoding/iso8859-5.enc lib/tcl9.0/encoding/iso8859-6.enc lib/tcl9.0/encoding/iso8859-7.enc lib/tcl9.0/encoding/iso8859-8.enc lib/tcl9.0/encoding/iso8859-9.enc lib/tcl9.0/encoding/jis0201.enc lib/tcl9.0/encoding/koi8-r.enc lib/tcl9.0/encoding/koi8-ru.enc lib/tcl9.0/encoding/koi8-t.enc lib/tcl9.0/encoding/koi8-u.enc lib/tcl9.0/encoding/macCentEuro.enc lib/tcl9.0/encoding/macCroatian.enc lib/tcl9.0/encoding/macCyrillic.enc lib/tcl9.0/encoding/macDingbats.enc lib/tcl9.0/encoding/macGreek.enc lib/tcl9.0/encoding/macIceland.enc lib/tcl9.0/encoding/macRoman.enc lib/tcl9.0/encoding/macRomania.enc lib/tcl9.0/encoding/macThai.enc lib/tcl9.0/encoding/macTurkish.enc lib/tcl9.0/encoding/macUkraine.enc lib/tcl9.0/encoding/symbol.enc lib/tcl9.0/encoding/tis-620.enc lib/tcl9.0/opt0.4/optparse.tcl lib/tcl9.0/opt0.4/pkgIndex.tcl
+Page 24 : lib/TclReadLine/pkgIndex.tcl lib/cookbox1.1.0/cookbox.tcl lib/cookbox1.1.0/pkgIndex.tcl lib/tcl9.0/auto.tcl lib/tcl9.0/foreachline.tcl lib/tcl9.0/history.tcl lib/tcl9.0/icu.tcl lib/tcl9.0/init.tcl lib/tcl9.0/install.tcl lib/tcl9.0/package.tcl lib/tcl9.0/parray.tcl lib/tcl9.0/readfile.tcl lib/tcl9.0/tclAppInit.c lib/tcl9.0/tclIndex lib/tcl9.0/tm.tcl lib/tcl9.0/word.tcl lib/tcl9.0/writefile.tcl lib/tcl9.0/cookiejar0.2/cookiejar.tcl lib/tcl9.0/cookiejar0.2/idna.tcl lib/tcl9.0/cookiejar0.2/pkgIndex.tcl lib/tcl9.0/encoding/ascii.enc lib/tcl9.0/encoding/cp1250.enc lib/tcl9.0/encoding/cp1251.enc lib/tcl9.0/encoding/cp1252.enc lib/tcl9.0/encoding/cp1253.enc lib/tcl9.0/encoding/cp1254.enc lib/tcl9.0/encoding/cp1255.enc lib/tcl9.0/encoding/cp1256.enc lib/tcl9.0/encoding/cp1257.enc lib/tcl9.0/encoding/cp1258.enc lib/tcl9.0/encoding/cp437.enc lib/tcl9.0/encoding/cp737.enc lib/tcl9.0/encoding/cp775.enc lib/tcl9.0/encoding/cp850.enc lib/tcl9.0/encoding/cp852.enc lib/tcl9.0/encoding/cp855.enc lib/tcl9.0/encoding/cp857.enc lib/tcl9.0/encoding/cp860.enc lib/tcl9.0/encoding/cp861.enc lib/tcl9.0/encoding/cp862.enc lib/tcl9.0/encoding/cp863.enc lib/tcl9.0/encoding/cp864.enc lib/tcl9.0/encoding/cp865.enc lib/tcl9.0/encoding/cp866.enc lib/tcl9.0/encoding/cp869.enc lib/tcl9.0/encoding/cp874.enc lib/tcl9.0/encoding/dingbats.enc lib/tcl9.0/encoding/ebcdic.enc lib/tcl9.0/encoding/gb1988.enc lib/tcl9.0/encoding/iso2022-jp.enc lib/tcl9.0/encoding/iso2022-kr.enc lib/tcl9.0/encoding/iso2022.enc lib/tcl9.0/encoding/iso8859-1.enc lib/tcl9.0/encoding/iso8859-10.enc lib/tcl9.0/encoding/iso8859-11.enc lib/tcl9.0/encoding/iso8859-13.enc lib/tcl9.0/encoding/iso8859-14.enc lib/tcl9.0/encoding/iso8859-15.enc lib/tcl9.0/encoding/iso8859-16.enc lib/tcl9.0/encoding/iso8859-2.enc lib/tcl9.0/encoding/iso8859-3.enc lib/tcl9.0/encoding/iso8859-4.enc lib/tcl9.0/encoding/iso8859-5.enc lib/tcl9.0/encoding/iso8859-6.enc lib/tcl9.0/encoding/iso8859-7.enc lib/tcl9.0/encoding/iso8859-8.enc lib/tcl9.0/encoding/iso8859-9.enc lib/tcl9.0/encoding/jis0201.enc lib/tcl9.0/encoding/koi8-r.enc lib/tcl9.0/encoding/koi8-ru.enc lib/tcl9.0/encoding/koi8-t.enc lib/tcl9.0/encoding/koi8-u.enc lib/tcl9.0/encoding/macCentEuro.enc lib/tcl9.0/encoding/macCroatian.enc lib/tcl9.0/encoding/macCyrillic.enc lib/tcl9.0/encoding/macDingbats.enc lib/tcl9.0/encoding/macGreek.enc lib/tcl9.0/encoding/macIceland.enc lib/tcl9.0/encoding/macRoman.enc lib/tcl9.0/encoding/macRomania.enc lib/tcl9.0/encoding/macThai.enc lib/tcl9.0/encoding/macTurkish.enc lib/tcl9.0/encoding/macUkraine.enc lib/tcl9.0/encoding/symbol.enc lib/tcl9.0/encoding/tis-620.enc lib/tcl9.0/opt0.4/optparse.tcl lib/tcl9.0/opt0.4/pkgIndex.tcl
 Page 25 : lib/TclReadLine/help.txt lib/tcl9/9.0/platform-1.0.19.tm lib/tcl9/9.0/platform/shell-1.1.4.tm
 Page 26 : args.tcl main.tcl
 ```
@@ -210,7 +211,7 @@ $ ../build.sh
 
 ```
 
-It is possible to build `cookbox` with Tcl 8.6.14 or Tcl 9.0b3. The default will be Tcl 8.6.14. To use Tcl 9.0b3, the appropriate parameter for `build.sh` must be specified:
+It is possible to build `cookbox` with Tcl 8.6.14/8.6.15 or Tcl 9.0.0. The default will be Tcl 8.6.15. To use Tcl 9.0.0, the appropriate parameter for `build.sh` must be specified:
 
 ```
 $ ../build.sh 9.0
@@ -220,11 +221,11 @@ $ ../build.sh 9.0
 
 Already built binaries are available on Github under [Releases](https://github.com/chpock/cookbox/releases).
 
-There are binaries build with Tcl 8.6.14 or Tcl 9.0b3 for the following platforms:
+There are binaries build with Tcl 8.6.15 or Tcl 9.0.0 for the following platforms:
 
 - **Windows x86** and **x86\_64**: Windows 7 or higher is required. However, they are only tested on Windows 10.
 - **Linux x86** and **x86\_64**: built and tested on Cenos6.10. Require glibc v2.12 or higher.
-- **MacOS x86** and **x86\_64**: built and tested on MacOS 10.12. However, these packages should be compatible with MacOS as of version 10.6.
+- **MacOS x86** and **x86\_64**: built and tested on MacOS 10.13. However, these packages should be compatible with MacOS as of version 10.10.
 
 ## Copyrights
 

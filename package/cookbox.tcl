@@ -27,10 +27,7 @@ proc op-analyze { options } {
 
     set fsid [cookfs::Mount $archive $archive -readonly {*}[dict get $options cookfs_opts]]
 
-    set fsindex [$fsid getindex]
-    set pages   [$fsid getpages]
-    set fsize   [file size $archive]
-    set root    $archive
+    set root $archive
 
     set frmsize [list apply { { size } {
         return [format "%8d" $size]
@@ -42,45 +39,50 @@ proc op-analyze { options } {
 
     array set pindex [list]
 
-    set striplen [llength [file split $root]]
     foreach fn [recursive_glob $root *] {
-        set fn [file join {*}[lrange [file split $fn] $striplen end]]
-        set index [$fsindex get $fn]
-        set chklist [lindex $index 2]
-        foreach { chkid - - } $chklist {
-            lappend pindex($chkid) $fn
+        foreach block [file attributes $fn -blocks] {
+            lappend pindex([dict get $block page]) [file attributes $fn -relative]
         }
     }
 
-    set length [$pages length]
+    set length [file attribute $root -pages]
 
     puts "Total pages: $length"
     puts ""
 
-    set size [$pages dataoffset 0]
+    set size [dict get [file attributes $root -parts] headsize]
 
     puts "Stub    : packed: [{*}$frmsize $size]"
     puts ""
 
     for { set i 0 } { $i < $length } { incr i } {
-        if { $i == [expr { $length - 1 }] } {
-            set csize [expr { [$pages filesize] - [$pages dataoffset $i] }]
-        } {
-            set csize [expr { [$pages dataoffset [expr { $i + 1 }]] - [$pages dataoffset $i] }]
-        }
-        set usize [string length [$pages get $i]]
+
+        set page [file attributes $root -pages $i]
+        set csize [dict get $page compsize]
+        set usize [dict get $page uncompsize]
+        set comp  [dict get $page compression]
+
         if { [info exists pindex($i)] } {
             set nfiles [llength $pindex($i)]
         } {
             set nfiles "<bootstrap>"
         }
-        puts "Page [format "%2d" $i] : packed: [{*}$frmsize $csize]; unpacked: [{*}$frmsize $usize]; ratio: [{*}$frmratio $usize $csize]; number of files: $nfiles"
+        puts "Page [format "%2d" $i] : packed($comp): [{*}$frmsize $csize]; unpacked: [{*}$frmsize $usize]; ratio: [{*}$frmratio $usize $csize]; number of files: $nfiles"
     }
 
     puts ""
-    set csize [expr { $fsize - [$pages filesize] }]
-    set usize [string length [$pages index]]
-    puts "Index   : packed:        -; unpacked: [{*}$frmsize $usize]; ratio: -"
+
+    set page [file attributes $root -pages pgindex]
+    set csize [dict get $page compsize]
+    set usize [dict get $page uncompsize]
+    set comp  [dict get $page compression]
+    puts "PgIndex : packed($comp): [{*}$frmsize $csize]; unpacked: [{*}$frmsize $usize]; ratio: [{*}$frmratio $usize $csize]"
+
+    set page [file attributes $root -pages fsindex]
+    set csize [dict get $page compsize]
+    set usize [dict get $page uncompsize]
+    set comp  [dict get $page compression]
+    puts "FsIndex : packed($comp): [{*}$frmsize $csize]; unpacked: [{*}$frmsize $usize]; ratio: [{*}$frmratio $usize $csize]"
 
     puts ""
     puts "-----------------------------------------------------------------------"
@@ -97,5 +99,4 @@ proc op-analyze { options } {
 
 }
 
-
-package provide cookbox 1.0.0
+package provide cookbox 1.1.0
